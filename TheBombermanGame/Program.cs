@@ -23,12 +23,7 @@ class Result
 
         int lin = grid.Count, col = grid[0].Length; //total number of lines & columns
 
-        //List<string> PlantedBombsPrev;
-        //List<string> PlantedBombsCurr = grid;
-        //List<string> Explosionfield = new List<string>(grid);
-        //List<string> ExplosionRemains = grid;
-        List<string> FullBombs = new List<string>();
-        
+        List<string> FullBombs = new List<string>();        
 
         for (int i = 0; i < lin;i++) //just fills the Explosionfield
         {
@@ -43,9 +38,6 @@ class Result
             sec++;
             if (sec % 2 != 0)
             {
-                //PlantedBombsPrev = new List<string>(Explosionfield);
-                //PlantedBombsCurr = PlantsBombs(Explosionfield);
-                //Explosionfield = ExplodeBombs(Explosionfield, FullBombs);
                 grid = ExplodeBombs(grid,FullBombs);
             }
 
@@ -72,6 +64,7 @@ class Result
     private static List<string> ExplodeBombs(List<string> BombsToExplode, List<string> Grid)
     {
         int lin = BombsToExplode.Count, col = BombsToExplode[0].Length;
+        List<string> ExplodedGrid = new List<string>(Grid);
 
         for (int l = 0; l < lin; l++) //cycle through lines
         {
@@ -85,17 +78,17 @@ class Result
                     {
                         string pLeft = "", pRight = "";
                         //1 away from border
-                        if (c > 0) { pLeft = Grid[l - 1].Substring(0, c); }
-                        if (c < col - 1) { pRight = Grid[l - 1].Substring(c + 1, col - c - 1); }
+                        if (c > 0) { pLeft = ExplodedGrid[l - 1].Substring(0, c); }
+                        if (c < col - 1) { pRight = ExplodedGrid[l - 1].Substring(c + 1, col - c - 1); }
 
-                        Grid[l - 1] = pLeft + "." + pRight;
+                        ExplodedGrid[l - 1] = pLeft + "." + pRight;
                     }
                     //CURRENT LINE (l)
 
                     string left = "", right = "", center;
                     //2 away from border
-                    if (c > 1) { left = Grid[l].Substring(0, c - 1); }
-                    if (c < col - 2) { right = Grid[l].Substring(c + 2, col - c - 2); }
+                    if (c > 1) { left = ExplodedGrid[l].Substring(0, c - 1); }
+                    if (c < col - 2) { right = ExplodedGrid[l].Substring(c + 2, col - c - 2); }
 
                     if (c == 0 || c == col - 1)
                     {
@@ -106,23 +99,23 @@ class Result
                         center = "..."; //bomb at least 1 away from border
                     }
 
-                    Grid[l] = left + center + right;
+                    ExplodedGrid[l] = left + center + right;
 
                     //NEXT LINE (l+1)
                     if (l < lin - 1) //if not the last line
                     {
                         string nLeft = "", nRight = "";
                         //1 away from border
-                        if (c > 0) { nLeft = Grid[l + 1].Substring(0, c); }
-                        if (c < col - 1) { nRight = Grid[l + 1].Substring(c + 1, col - c - 1); }
+                        if (c > 0) { nLeft = ExplodedGrid[l + 1].Substring(0, c); }
+                        if (c < col - 1) { nRight = ExplodedGrid[l + 1].Substring(c + 1, col - c - 1); }
 
-                        Grid[l + 1] = nLeft + "." + nRight;
+                        ExplodedGrid[l + 1] = nLeft + "." + nRight;
                     }
                 }
             }
         }
 
-        return Grid;
+        return ExplodedGrid;
     }
 }
 
